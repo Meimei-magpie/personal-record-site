@@ -4,19 +4,28 @@ import 'filepond/dist/filepond.min.css';
 
 function ImageUploader() {
   const [files, setFiles] = useState([]);
+  
+  // ✅ 使用环境变量，如果不存在则使用本地开发地址
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   const handleUpdateFiles = (fileItems) => {
-    // 将文件数组更新到状态
     setFiles(fileItems.map(fileItem => fileItem.file));
   };
 
   return (
     <div>
-      <h2>上传图片</h2>
       <FilePond
-        files={files}  // 绑定文件状态
-        onupdatefiles={handleUpdateFiles}  // 处理文件更新
-        server="https://railway.com/project/ce721a56-8f3f-4d9c-9fad-be27896dcbeb/upload"  // 上传路径，指向 Vercel 的 upload.js
+        files={files}
+        onupdatefiles={handleUpdateFiles}
+        server={{
+          process: {
+            url: `${API_URL}/upload`,
+            method: 'POST',
+            withCredentials: false
+          }
+        }}
+        name="image"
+        labelIdle='拖放文件或 <span class="filepond--label-action">浏览</span>'
       />
     </div>
   );
