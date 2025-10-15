@@ -1,0 +1,186 @@
+#项目结构#
+/personal-record-site
+    /backend
+        server.js
+    /frontend
+        /src
+            /components
+                Editor.js
+                ImageUploader.js
+                WorldMap.js
+                UserProfile.js
+            App.js
+            index.js
+    package.json
+#创建REACT项目#
+npx create-react-app frontend
+cd frontend
+npm install react-quill leaflet react-leaflet react-filepond filepond
+
+#APP.JS#
+import React from 'react';
+import WorldMap from './components/WorldMap';
+import UserProfile from './components/UserProfile';
+import Editor from './components/Editor';
+import ImageUploader from './components/ImageUploader';
+
+function App() {
+  return (
+    <div style={{ position: 'relative', height: '100vh' }}>
+      <WorldMap />
+      <div style={{ position: 'absolute', top: '20px', left: '20px', color: 'white' }}>
+        <h1>个人记录宏观信息</h1>
+      </div>
+      <div style={{ position: 'absolute', top: '100px', left: '20px', color: 'white' }}>
+        <h2>个人介绍</h2>
+        <UserProfile />
+      </div>
+      <div style={{ position: 'absolute', top: '300px', left: '20px', color: 'white' }}>
+        <h2>宏观解读</h2>
+        <Editor />
+      </div>
+      <div style={{ position: 'absolute', top: '500px', left: '20px', color: 'white' }}>
+        <h2>上传图片</h2>
+        <ImageUploader />
+      </div>
+    </div>
+  );
+}
+
+export default App;
+#世界地图背景#
+import React from 'react';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+function WorldMap() {
+  return (
+    <MapContainer center={[0, 0]} zoom={2} style={{ height: '100vh', width: '100%' }}>
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    </MapContainer>
+  );
+}
+
+export default WorldMap;
+#展示个人信息#
+import React, { useState } from 'react';
+
+function UserProfile() {
+  const [intro, setIntro] = useState('这是我的个人介绍。');
+
+  const handleChange = (e) => {
+    setIntro(e.target.value);
+  };
+
+  return (
+    <div>
+      <textarea
+        value={intro}
+        onChange={handleChange}
+        rows="4"
+        cols="50"
+        style={{ width: '300px' }}
+      />
+    </div>
+  );
+}
+
+export default UserProfile;
+#宏观解读的富文本功能#
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+function Editor() {
+  const [content, setContent] = useState('');
+
+  const handleChange = (value) => {
+    setContent(value);
+  };
+
+  return (
+    <div>
+      <ReactQuill value={content} onChange={handleChange} />
+    </div>
+  );
+}
+
+export default Editor;
+#图片上传功能#
+import React, { useState } from 'react';
+import { FilePond } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+
+function ImageUploader() {
+  const [files, setFiles] = useState([]);
+
+  const handleUpdateFiles = (fileItems) => {
+    setFiles(fileItems.map(fileItem => fileItem.file));
+  };
+
+  return (
+    <FilePond
+      files={files}
+      onupdatefiles={handleUpdateFiles}
+      server="/upload"  // 图片上传接口
+    />
+  );
+}
+
+export default ImageUploader;
+
+
+#后端代码#
+#在 backend 文件夹中，初始化一个新的 Node.js 项目#
+mkdir backend
+cd backend
+npm init -y
+npm install express multer
+#serve.js#
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const app = express();
+
+// 设置存储位置和文件名
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+// 初始化 multer 上传配置
+const upload = multer({ storage });
+
+app.use(express.static('uploads'));  // 允许公开访问上传的文件
+
+// 图片上传接口
+app.post('/upload', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+  res.json({ fileUrl: `/uploads/${req.file.filename}` });
+});
+
+// 启动服务器
+app.listen(5000, () => {
+  console.log('Server is running on http://localhost:5000');
+});
+#创建上传文件夹#
+mkdir uploads
+
+#连接前后端#
+#安装cors#
+npm install cors
+#在serve.js中添加cors配置#
+const cors = require('cors');
+app.use(cors());
+#启用后端服务器#
+node frontend/backend/server.js
+#启用前端react应用!!必须在package.json根目录下运行#
+npm start
+#访问#
+http://localhost:3000
