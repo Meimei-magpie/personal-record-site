@@ -6,6 +6,14 @@ import ImageUploader from './components/ImageUploader';
 import React, { useEffect } from 'react';
 
 function App() {
+ useEffect(() => {
+    console.log('🚀 App组件已加载！');
+    console.log('📍 环境变量 REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    console.log('📍 所有环境变量:', process.env);
+    
+    // 添加一个明显的错误信息测试
+    console.error('这是一个测试错误信息，应该能看到！');
+  }, []);
 useEffect(() => {
     console.log('环境变量 REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
     console.log('所有REACT_APP开头的变量:', 
