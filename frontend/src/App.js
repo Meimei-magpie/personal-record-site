@@ -6,27 +6,19 @@ import ImageUploader from './components/ImageUploader';
 
 function App() {
   return (
-    <div style={{ position: 'relative', height: '100vh' }}>
-      {/* World Map */}
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <WorldMap />
-     
-
-      
-      {/* Page Content */}
-         <div style={{ position: 'absolute', top: '20px', left: '20px', color: 'white' }}>
+      <div style={{ position: 'absolute', top: '20px', left: '20px', color: 'white' }}>
         <h1>个人记录宏观信息</h1>
       </div>
-      
       <div style={{ position: 'absolute', top: '100px', left: '20px', color: 'white' }}>
         <h2>个人介绍</h2>
         <UserProfile />
       </div>
-      
       <div style={{ position: 'absolute', top: '300px', left: '20px', color: 'white' }}>
         <h2>宏观解读</h2>
         <Editor />
       </div>
-      
       <div style={{ position: 'absolute', top: '500px', left: '20px', color: 'white' }}>
         <h2>上传图片</h2>
         <ImageUploader />
