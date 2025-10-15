@@ -179,7 +179,7 @@ npm install cors
 const cors = require('cors');
 app.use(cors());
 #启用后端服务器#
-node frontend/backend/server.js
+node backend/server.js
 #启用前端react应用!!必须在package.json根目录下运行#
 npm start
 #访问#
