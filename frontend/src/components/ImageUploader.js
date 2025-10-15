@@ -5,13 +5,26 @@ import 'filepond/dist/filepond.min.css';
 function ImageUploader() {
   const [files, setFiles] = useState([]);
   
-  // ✅ 使用环境变量，如果不存在则使用本地开发地址
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  console.log('当前API地址:', API_URL);
 
   const handleUpdateFiles = (fileItems) => {
     setFiles(fileItems.map(fileItem => fileItem.file));
   };
+const serverConfig = {
+    process: {
+      url: `${API_URL}/upload`,
+      method: 'POST',
+      withCredentials: false
+    }
+  };
+  
+  console.log('FilePond 服务器配置:', serverConfig);
+  console.log('完整上传URL:', serverConfig.process.url);
 
+  const handleUpdateFiles = (fileItems) => {
+    setFiles(fileItems.map(fileItem => fileItem.file));
+  };
   return (
     <div>
       <FilePond

@@ -6,6 +6,11 @@ import ImageUploader from './components/ImageUploader';
 import React, { useEffect } from 'react';
 
 function App() {
+useEffect(() => {
+    console.log('环境变量 REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    console.log('所有REACT_APP开头的变量:', 
+      Object.keys(process.env).filter(key => key.startsWith('REACT_APP_')));
+  }, []);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <WorldMap />
@@ -26,11 +31,6 @@ function App() {
       </div>
     </div>
   );
-useEffect(() => {
-    console.log('当前API基础地址:', process.env.REACT_APP_API_URL);
-    // 你也可以打印整个process.env对象来查看所有可用的环境变量（注意：只有REACT_APP_开头的变量会被嵌入）
-    // console.log('所有环境变量:', process.env);
-  }, []); // 空依赖数组意味着这个effect只在组件挂载后运行一次
 }
 
 export default App;
