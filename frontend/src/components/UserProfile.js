@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function UserProfile() {
-  const [intro, setIntro] = useState('这是我的个人介绍。');
+  const [intro, setIntro] = useState('作者希望记录对全球宏观的观察');
 
   const handleChange = (e) => {
     setIntro(e.target.value);
