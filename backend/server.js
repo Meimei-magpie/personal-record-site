@@ -26,9 +26,6 @@ app.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  
-  // 在生产环境中，这里应该将文件上传到云存储
-  // 现在先返回一个模拟的响应
   res.json({ 
     fileUrl: 'https://via.placeholder.com/300',
     message: '文件上传请求已收到（实际存储功能待实现）',

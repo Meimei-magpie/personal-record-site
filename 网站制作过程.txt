@@ -6,3 +6,4 @@ note：1. bash打开方法  win+R  输入cmd   这是整个电脑终端    如�
          
           6.按照提示修改文件按信息
           7.按照提示解决空白页等不正确部署的问题
+         8.现在前后端都正常运行，本地环境终端中npm start后访问http://localhost:3000/查看前端；浏览器生产环境访问https://personal-record-site-frontend.vercel.app查看前端.  后端类似

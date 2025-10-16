@@ -23,10 +23,24 @@ import WorldMap from './components/WorldMap';
 import UserProfile from './components/UserProfile';
 import Editor from './components/Editor';
 import ImageUploader from './components/ImageUploader';
+import React, { useEffect } from 'react';
 
 function App() {
+ useEffect(() => {
+    console.log('🚀 App组件已加载！');
+    console.log('📍 环境变量 REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    console.log('📍 所有环境变量:', process.env);
+    
+    // 添加一个明显的错误信息测试
+    console.error('这是一个测试错误信息，应该能看到！');
+  }, []);
+useEffect(() => {
+    console.log('环境变量 REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    console.log('所有REACT_APP开头的变量:', 
+      Object.keys(process.env).filter(key => key.startsWith('REACT_APP_')));
+  }, []);
   return (
-    <div style={{ position: 'relative', height: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <WorldMap />
       <div style={{ position: 'absolute', top: '20px', left: '20px', color: 'white' }}>
         <h1>个人记录宏观信息</h1>
@@ -55,18 +69,17 @@ import 'leaflet/dist/leaflet.css';
 
 function WorldMap() {
   return (
-    <MapContainer center={[0, 0]} zoom={2} style={{ height: '100vh', width: '100%' }}>
+    <MapContainer center={[0, 0]} zoom={2} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh', zIndex: -1 }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
     </MapContainer>
   );
 }
-
 export default WorldMap;
 #展示个人信息#
 import React, { useState } from 'react';
 
 function UserProfile() {
-  const [intro, setIntro] = useState('这是我的个人介绍。');
+  const [intro, setIntro] = useState('作者希望在这里记录对全球宏观变动的观察');
 
   const handleChange = (e) => {
     setIntro(e.target.value);
@@ -113,22 +126,47 @@ import 'filepond/dist/filepond.min.css';
 
 function ImageUploader() {
   const [files, setFiles] = useState([]);
+  
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  console.log('当前API地址:', API_URL);
 
   const handleUpdateFiles = (fileItems) => {
     setFiles(fileItems.map(fileItem => fileItem.file));
   };
+const serverConfig = {
+    process: {
+      url: `${API_URL}/upload`,
+      method: 'POST',
+      withCredentials: false
+    }
+  };
+  
+  console.log('FilePond 服务器配置:', serverConfig);
+  console.log('完整上传URL:', serverConfig.process.url);
 
+  const handleUpdateFiles = (fileItems) => {
+    setFiles(fileItems.map(fileItem => fileItem.file));
+  };
   return (
-    <FilePond
-      files={files}
-      onupdatefiles={handleUpdateFiles}
-      server="/upload"  // 图片上传接口
-    />
+    <div>
+      <FilePond
+        files={files}
+        onupdatefiles={handleUpdateFiles}
+        server={{
+          process: {
+            url: `${API_URL}/upload`,
+            method: 'POST',
+            withCredentials: false
+          }
+        }}
+        name="image"
+        labelIdle='拖放文件或 <span class="filepond--label-action">浏览</span>'
+      />
+    </div>
   );
 }
 
 export default ImageUploader;
-
 
 #后端代码#
 #在 backend 文件夹中，初始化一个新的 Node.js 项目#
