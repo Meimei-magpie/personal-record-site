@@ -30,9 +30,10 @@ function App() {
       <div style={{ position: 'absolute', top: '20px', left: '20px', color: 'white' }}>
         <h1>个人记录宏观信息</h1>
       </div>
+
+      {/* 个人介绍显示，传递 isAuthenticated 来控制是否可以编辑 */}
       <div style={{ position: 'absolute', top: '100px', left: '20px', color: 'white' }}>
-        <h2>个人介绍</h2>
-        <UserProfile />
+        <UserProfile isAuthenticated={isAuthenticated} />
       </div>
 
       {/* 如果用户已登录，显示编辑和上传功能，否则显示登录组件 */}
@@ -58,4 +59,5 @@ function App() {
 }
 
 export default App;
+
 

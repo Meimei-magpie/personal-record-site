@@ -50,9 +50,10 @@ function App() {
       <div style={{ position: 'absolute', top: '20px', left: '20px', color: 'white' }}>
         <h1>个人记录宏观信息</h1>
       </div>
+
+      {/* 个人介绍显示，传递 isAuthenticated 来控制是否可以编辑 */}
       <div style={{ position: 'absolute', top: '100px', left: '20px', color: 'white' }}>
-        <h2>个人介绍</h2>
-        <UserProfile />
+        <UserProfile isAuthenticated={isAuthenticated} />
       </div>
 
       {/* 如果用户已登录，显示编辑和上传功能，否则显示登录组件 */}
@@ -93,24 +94,35 @@ function WorldMap() {
 }
 export default WorldMap;
 #展示个人信息#
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function UserProfile() {
+function UserProfile({ isAuthenticated }) {
   const [intro, setIntro] = useState('作者希望在这里记录对全球宏观变动的观察');
 
+  // 如果是已登录状态，允许编辑
   const handleChange = (e) => {
-    setIntro(e.target.value);
+    if (isAuthenticated) {
+      setIntro(e.target.value);
+    }
   };
 
   return (
     <div>
-      <textarea
-        value={intro}
-        onChange={handleChange}
-        rows="4"
-        cols="50"
-        style={{ width: '300px' }}
-      />
+      <h3>个人介绍</h3>
+      {isAuthenticated ? (
+        <textarea
+          value={intro}
+          onChange={handleChange}
+          rows="4"
+          cols="50"
+          style={{ width: '300px' }}
+        />
+      ) : (
+        <p>{intro}</p>
+      )}
+      {!isAuthenticated && (
+        <p style={{ color: 'red' }}>请登录以编辑个人介绍。</p>
+      )}
     </div>
   );
 }
