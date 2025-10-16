@@ -22,10 +22,7 @@ const serverConfig = {
   console.log('FilePond 服务器配置:', serverConfig);
   console.log('完整上传URL:', serverConfig.process.url);
 
-  const handleUpdateFiles = (fileItems) => {
-    setFiles(fileItems.map(fileItem => fileItem.file));
-  };
-  return (
+    return (
     <div>
       <FilePond
         files={files}
