@@ -5,9 +5,15 @@ function Login({ onLogin }) {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleLogin = async () => {
+  // 处理表单提交
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // 清空之前的错误信息
+    setErrorMessage('');
+
+    // 向后端发送登录请求
     try {
-      // 发送请求到后端进行登录验证
       const response = await fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: {
@@ -25,7 +31,7 @@ function Login({ onLogin }) {
       const data = await response.json();
       const token = data.token;
 
-      // 登录成功，存储 token 到 localStorage
+      // 存储 token 到 localStorage
       localStorage.setItem('token', token);
 
       // 调用父组件的 onLogin 函数更新登录状态
@@ -37,31 +43,38 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div style={{ padding: '20px', color: 'white' }}>
-      <h2>请登录</h2>
-      <input
-        type="text"
-        placeholder="用户名"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        style={{ marginBottom: '10px', padding: '8px', width: '200px' }}
-      />
-      <br />
-      <input
-        type="password"
-        placeholder="密码"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ marginBottom: '10px', padding: '8px', width: '200px' }}
-      />
-      <br />
-      <button
-        onClick={handleLogin}
-        style={{ padding: '10px 20px', backgroundColor: 'green', color: 'white' }}
-      >
-        登录
-      </button>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+    <div style={{ color: 'white' }}>
+      <h2>登录</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>
+            用户名:
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              style={{ marginLeft: '10px' }}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            密码:
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ marginLeft: '10px' }}
+            />
+          </label>
+        </div>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        <div>
+          <button type="submit" style={{ marginTop: '10px' }}>登录</button>
+        </div>
+      </form>
     </div>
   );
 }

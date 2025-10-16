@@ -1,4 +1,4 @@
-iimport React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function UserProfile({ isAuthenticated }) {
   const [intro, setIntro] = useState('作者希望在这里记录对全球宏观变动的观察');

@@ -22,7 +22,7 @@ app.use(express.json());
 const users = [
   {
     username: 'admin',
-    password: '$2a$10$kPqH02Um94fKbBhZ0YzVOi8q0ro/ogZ2Dpxs46cGpWeKgRWi0UwmS'  // 这是加密后的 "password123"
+    password: '$2b$10$ubW/KL/hR8qfeM36Kvv0UOdPanK0iFjZwK3hIBv.7OGXAEHBD4jxC'  // 这是加密后的 "password123"
   }
 ];
 
